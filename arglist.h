@@ -1,15 +1,16 @@
 #ifndef ARGLIST_H
 #define ARGLIST_H
 
+struct ALChain;
+
 typedef struct node{
-    char *key;
     char *value;
 
-    node *next;
+    struct node *next;
 } ALNode;
 
 typedef struct {
-    ALNode *head;
+    struct ALChain *head;
 } ArgList;
 
 ArgList AL_Create(int argc, char *argv[]);
