@@ -39,15 +39,10 @@ ArgList AL_Create(int argc, char *argv[])
             else
                 last->next = link;
 
-            if(i < argc - 1)
-            {
-                ALNode *node = malloc(sizeof(ALNode));
-                node->value = argv[i + 1];
-                node->next = NULL;
-                link->list = node;
-            }
-            else
-                link->list = NULL;
+            ALNode *node = malloc(sizeof(ALNode));
+            node->value = i < argc - 1 ? argv[i + 1] : NULL;
+            node->next = NULL;
+            link->list = node;
 
             last = link;
         }
@@ -90,4 +85,27 @@ ALNode *AL_NodeForKey(ArgList *lst, char *key)
     }
 
     return NULL;
+}
+
+void AL_ForEachUniqueKey(ArgList *lst, ALNodeFunction nodefunc)
+{
+    struct ALChain *link = lst->head;
+    for(link; link; link = link->next)
+        nodefunc(link->key, link->list);
+}
+
+void AL_ForEachValueWithKey(ArgList *lst, char *key, ALSwitchFunction switchfunc)
+{
+    AL_ForEachValueInNode(AL_NodeForKey(lst, key), switchfunc);
+}
+
+void AL_ForEachValueInNode(ALNode *node, ALSwitchFunction switchfunc)
+{
+    for(node; node; node = node->next)
+        switchfunc(node->value);
+}
+
+char *AL_FirstValueForKey(ArgList *lst, char *key)
+{
+    return AL_NodeForKey(lst, key)->value;
 }
