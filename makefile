@@ -3,3 +3,6 @@ compile: arglist.c arglist.h
 
 example: arglist.c arglist.h main.c
 	gcc -o arglist arglist.c main.c
+
+clean:
+	rm arglist arglist.o

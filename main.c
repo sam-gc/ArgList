@@ -12,11 +12,6 @@ int main(int argc, char *argv[])
 {
     ArgList alist = AL_Create(argc, argv);
 
-    ALNode *node = AL_NodeForKey(&alist, "hello");
-    
-    if(node)
-        printf("Key \"hello\" yieled value \"%s\"\n", node->value);
-
     AL_ForEachUniqueKey(&alist, &print_contents);
 
     return 0;
