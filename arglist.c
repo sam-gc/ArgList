@@ -23,14 +23,14 @@ ArgList AL_Create(int argc, char *argv[])
             while(cur->next)
                 cur = cur->next;
 
-            ALNode *nxt = malloc(sizeof(ALNode));
+            ALNode *nxt = (ALNode *)malloc(sizeof(ALNode));
             nxt->next = NULL;
             nxt->value = i < argc - 1 ? argv[i + 1] : NULL;
             cur->next = nxt;
         }
         else
         {
-            struct ALChain *link = malloc(sizeof(struct ALChain));
+            struct ALChain *link = (struct ALChain *)malloc(sizeof(struct ALChain));
             link->key = argv[i];
             link->next = NULL;
 
@@ -39,7 +39,7 @@ ArgList AL_Create(int argc, char *argv[])
             else
                 last->next = link;
 
-            ALNode *node = malloc(sizeof(ALNode));
+            ALNode *node = (ALNode *)malloc(sizeof(ALNode));
             node->value = i < argc - 1 ? argv[i + 1] : NULL;
             node->next = NULL;
             link->list = node;
@@ -78,7 +78,7 @@ int AL_Contains(ArgList *lst, char *key)
 ALNode *AL_NodeForKey(ArgList *lst, char *key)
 {
     struct ALChain *link = lst->head;
-    for(link; link; link = link->next)
+    for(; link; link = link->next)
     {
         if(strcmp(key, link->key) == 0)
             return link->list;
@@ -90,7 +90,7 @@ ALNode *AL_NodeForKey(ArgList *lst, char *key)
 void AL_ForEachUniqueKey(ArgList *lst, ALNodeFunction nodefunc)
 {
     struct ALChain *link = lst->head;
-    for(link; link; link = link->next)
+    for(; link; link = link->next)
         nodefunc(link->key, link->list);
 }
 
@@ -101,7 +101,7 @@ void AL_ForEachValueWithKey(ArgList *lst, char *key, ALSwitchFunction switchfunc
 
 void AL_ForEachValueInNode(ALNode *node, ALSwitchFunction switchfunc)
 {
-    for(node; node; node = node->next)
+    for(; node; node = node->next)
         switchfunc(node->value);
 }
 
