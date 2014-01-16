@@ -8,4 +8,4 @@ example_C++: arglist.c arglist.h main.cpp
 	g++ -o arglist++ arglist.c main.cpp -std=c++11
 
 clean:
-	rm arglist arglist.o
+	rm arglist arglist++ arglist.o
