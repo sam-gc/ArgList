@@ -14,5 +14,7 @@ int main(int argc, char *argv[])
 
     AL_ForEachUniqueKey(&alist, &print_contents);
 
+    AL_Free(&alist);
+
     return 0;
 }
