@@ -82,6 +82,11 @@ void AL_ForEachValueWithKey(ArgList *lst, char *key, ALSwitchFunction switchfunc
  **/
 void AL_ForEachValueInNode(ALNode *node, ALSwitchFunction switchfunc);
 
+/**
+ * Given a "key", return the (char *) value of the first proceeding
+ * parameter. This is useful if you only expect a switch only to be used
+ * once with only one parameter.
+ **/
 char *AL_FirstValueForKey(ArgList *lst, char *key);
 
 #ifdef __cplusplus
