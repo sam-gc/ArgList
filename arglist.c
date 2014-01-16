@@ -1,5 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
+#include <stdio.h>
 #include "arglist.h"
 
 struct ALChain {
@@ -10,6 +12,36 @@ struct ALChain {
 
 ArgList AL_Create(int argc, char *argv[])
 {
+    return AL_CreateWithContraints(argc, argv, 0, NULL);
+}
+
+int arrContainsStr(char *arr[], char *str)
+{
+    char *curr = arr[0];
+
+    int i;
+    for(i = 0; curr && i < 100; curr++, i++)
+    {
+        if(strcmp(curr, str) == 0)
+            return 1;
+    }
+
+    return 0;
+}
+
+ArgList AL_CreateWithContraints(int argc, char *argv[], int dieOnErr, ...)
+{
+    char *verboten[100];
+    va_list list;
+    va_start(list, dieOnErr);
+    char *curr;
+
+    int vcount;
+    for(vcount = 0; (curr = va_arg(list, char *)); vcount++)
+        verboten[vcount] = curr;
+
+    verboten[vcount + 1] = NULL;
+
     ArgList arlist = {NULL};
 
     struct ALChain *last = NULL;
@@ -17,6 +49,20 @@ ArgList AL_Create(int argc, char *argv[])
     int i;
     for(i = 0; i < argc; i++)
     {
+        if(vcount && i) // i > 0 to skip checking the program name
+        {
+            if(!arrContainsStr(verboten, argv[i]) && !arrContainsStr(verboten, argv[i - 1]))
+            {
+                printf("Unrecognized parameter: %s\n", argv[i]);
+                if(dieOnErr)
+                {
+                    AL_Free(&arlist);
+                    exit(0);
+                }
+                continue;
+            }
+        }
+
         ALNode *cur = AL_NodeForKey(&arlist, argv[i]);
         if(cur)
         {

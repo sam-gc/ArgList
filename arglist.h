@@ -29,6 +29,7 @@ typedef void (*ALSwitchFunction)(char *value);
 #endif
 
 ArgList AL_Create(int argc, char *argv[]);
+ArgList AL_CreateWithContraints(int argc, char *argv[], int dieOnErr, ...);
 void AL_Free(ArgList *lst);
 int AL_Contains(ArgList *lst, char *key);
 ALNode *AL_NodeForKey(ArgList *lst, char *key);
