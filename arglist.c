@@ -51,13 +51,16 @@ ArgList AL_CreateWithContraints(int argc, char *argv[], int dieOnErr, ...)
     {
         if(vcount && i) // i > 0 to skip checking the program name
         {
-            if(!arrContainsStr(verboten, argv[i]) && !arrContainsStr(verboten, argv[i - 1]))
+            if(!arrContainsStr(verboten, argv[i]))
             {
-                printf("Unrecognized parameter: %s\n", argv[i]);
-                if(dieOnErr)
+                if(!arrContainsStr(verboten, argv[i - 1]))
                 {
-                    AL_Free(&arlist);
-                    exit(0);
+                    printf("Unrecognized parameter: %s\n", argv[i]);
+                    if(dieOnErr)
+                    {
+                        AL_Free(&arlist);
+                        exit(0);
+                    }
                 }
                 continue;
             }
